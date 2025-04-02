@@ -17,7 +17,7 @@ logger = Logger(log_dir='../automation_logs')
 # Database connection
 @st.cache_resource
 def get_connection():
-    return sqlite3.connect('../database/tickets.db', check_same_thread=False)
+    return sqlite3.connect('tickets.db', check_same_thread=False)
 
 def load_data():
     conn = get_connection()
