@@ -6,6 +6,56 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import os
 import sys
+import streamlit as st
+st.set_page_config(page_title="Quality Automation Dashboard", layout="wide")
+
+
+# --- User credentials and roles ---
+users = {
+    "admin": {"password": "admin123", "role": "Admin"},
+    "analyst": {"password": "analyst123", "role": "Analyst"},
+    "support": {"password": "support123", "role": "Support"}
+}
+
+# --- Initialize session ---
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+    st.session_state.role = None
+    st.session_state.user = None
+
+# --- Login Form ---
+if not st.session_state.logged_in:
+    st.title("🔒 Login to View Dashboard")
+
+    st.markdown("""
+    <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+        <strong>Available users:</strong><br>
+        <code>admin / admin123</code><br>
+        <code>analyst / analyst123</code><br>
+        <code>support / support123</code>
+    </p>
+    """, unsafe_allow_html=True)
+
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        if username in users and users[username]["password"] == password:
+            st.session_state.logged_in = True
+            st.session_state.role = users[username]["role"]
+            st.session_state.user = username
+            st.success(f"Welcome, {username} ({st.session_state.role})")
+            st.rerun()
+        else:
+            st.error("Invalid credentials")
+
+    st.stop()  # Stop here if not logged in
+
+# --- Logout ---
+st.sidebar.markdown(f"👤 Logged in as: **{st.session_state.user}** ({st.session_state.role})")
+if st.sidebar.button("Logout"):
+    st.session_state.logged_in = False
+    st.rerun()
 
 # Add parent directory to path to import from workflow
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,12 +83,6 @@ def load_data():
     return df
 
 # Page configuration
-st.set_page_config(
-    page_title="Quality Automation Dashboard",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Title and description
 st.title("Quality Automation and Operational Dashboard")
