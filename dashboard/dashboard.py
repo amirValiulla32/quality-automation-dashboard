@@ -17,7 +17,9 @@ logger = Logger(log_dir='../automation_logs')
 # Database connection
 @st.cache_resource
 def get_connection():
-    return sqlite3.connect('tickets.db', check_same_thread=False)
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DB_PATH = os.path.join(BASE_DIR, "tickets.db")
+    return sqlite3.connect(DB_PATH, check_same_thread=False)
 
 def load_data():
     conn = get_connection()
@@ -25,8 +27,8 @@ def load_data():
     df = pd.read_sql_query(query, conn)
     
     # Convert datetime strings to datetime objects
-    df['created_at'] = pd.to_datetime(df['created_at'])
-    df['updated_at'] = pd.to_datetime(df['updated_at'])
+    df['created_at'] = pd.to_datetime(df['created_at'], format='ISO8601', errors='coerce')
+    df['updated_at'] = pd.to_datetime(df['updated_at'], format='ISO8601', errors='coerce')
     
     return df
 

@@ -19,9 +19,13 @@ class TestTicketSystem(unittest.TestCase):
     def setUpClass(cls):
         """Set up test database connection"""
         # Connect to the database
-        cls.conn = sqlite3.connect('../database/tickets.db')
-        cls.conn.row_factory = sqlite3.Row
+        """Set up test database connection"""
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(base_dir, '../dashboard/tickets.db')
+        cls.conn = sqlite3.connect(db_path)
+        cls.conn.row_factory = sqlite3.Row  # ✅ This line enables dict-style access
         cls.cursor = cls.conn.cursor()
+        print("[INFO] Test suite initialized")
         
         # Create test_logs directory
         os.makedirs('../test_logs', exist_ok=True)
