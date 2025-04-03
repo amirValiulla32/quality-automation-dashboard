@@ -1,7 +1,9 @@
 # Quality Automation and Operational Dashboard Tool
 
 A fully functional prototype of a Quality Automation and Operational Dashboard Tool that simulates internal workflows and testing processes for a client operations team — inspired by the internship job description from Securitas.
+
 You can interact with the fully deployed dashboard here:
+
 Live Streamlit App: bit.ly/4cg3doI 
 
 Demo Users (for testing login):
